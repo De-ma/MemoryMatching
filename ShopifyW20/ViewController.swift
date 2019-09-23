@@ -11,21 +11,47 @@ import Moya
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var mainView: UIView!
     lazy var game = MemoryMatching(numberOfPairsOfCards: cardButtons.count / 2)
-    var flipCount: Int = 0 {
+    var playerOneScore = 0 {
         didSet {
-            flipCountLabel.text = "Flips: \(flipCount)"
+            playerOneLabel.text = "Player 1: \(playerOneScore)"
+            if (playerOneScore >= 10) {
+                someoneWon(player: 1)
+            }
         }
     }
-    @IBOutlet weak var flipCountLabel: UILabel!
+    var playerTwoScore = 0 {
+        didSet {
+            playerTwoLabel.text = "Player 2: \(playerTwoScore)"
+            if (playerTwoScore >= 10) {
+                someoneWon(player: 2)
+            }
+        }
+    }
+    
+    @IBOutlet weak var playerOneLabel: UILabel!
+    @IBOutlet weak var playerTwoLabel: UILabel!
     @IBOutlet var cardButtons: [UIButton]!
     static var collection: ShopifyProduct?
+    var emoji = [Int: String]()
+    var playerOnePlaying = true //lets have player one go first!
+    var twoCardTouched = 0
     
     @IBAction func touchCard(_ sender: UIButton) {
-        flipCount += 1
         if let cardNumber = cardButtons.firstIndex(of: sender) {
-            game.chooseCard(at: cardNumber)
+            let matchedCard = game.chooseCard(at: cardNumber, player: playerOnePlaying)
             updateViewFromModel()
+            if (playerOnePlaying && matchedCard) {
+                playerOneScore += 1
+            } else if (!playerOnePlaying && matchedCard) {
+                playerTwoScore += 1
+            }
+            twoCardTouched += 1
+            if (twoCardTouched == 2) {
+                twoCardTouched = 0
+                playerOnePlaying = !playerOnePlaying
+            }
         }
     }
     
@@ -34,25 +60,19 @@ class ViewController: UIViewController {
             let button = cardButtons[index]
             let card = game.cards[index]
             if card.isFaceUp {
-                
-//                button.setTitle(emoji(for: card), for: .normal)
-                
                 let url = URL(string: emoji(for: card))
                 let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
-//                imageView.image =
-                button.setImage(UIImage(data: data!), for: .normal)
+                button.setBackgroundImage(UIImage(data: data!), for: .normal)
                 button.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
             } else {
                 button.setTitle("", for: .normal)
-                button.setImage(nil, for: .normal)
-                button.backgroundColor = card.isMatched ? #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 0) : #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
+                button.setBackgroundImage(nil, for: .normal)
+                button.backgroundColor = card.isMatched ? #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 0) : #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1)
             }
         }
     }
     
-    var emojiChoices = ["🐶", "🐹", "🐻", "🐱", "🐸", "🐨", "🐼", "🦊", "🐯", "🐵", "🐭", "🐮", "🐷"]
-    var emoji = [Int: String]()
-    
+
     func emoji(for card: Card) -> String {
         if (emoji[card.identifier] == nil){
             //JIT loading
@@ -62,8 +82,6 @@ class ViewController: UIViewController {
                 ViewController.collection?.products.remove(at: randomIndex)
                 return emoji[card.identifier]!
             }
-
-
         }
         return emoji[card.identifier] ?? "?"
     }
@@ -81,6 +99,31 @@ class ViewController: UIViewController {
         }
     }
     
+    
+    func someoneWon(player: Int) {
+        
+        let screenRect = UIScreen.main.bounds
+        let screenWidth = screenRect.size.width
+        let screenHeight = screenRect.size.height
+        
+        let subView = UIView(frame: CGRect(x: screenWidth * 0.15, y: screenHeight * 0.25 , width: 300, height: 200))
+        subView.backgroundColor = #colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)
+        
+        
+        view.addSubview(subView)
+        let winLabel: UILabel = {
+            let label = UILabel()
+            label.frame = CGRect(x: screenWidth * 0.15, y: screenHeight * 0.1, width: 300, height: 20)
+            label.text = "Player \(player) won! 🎉"
+            label.textColor = .black
+            label.font = UIFont(name: "Helvetica", size: 30)
+            return label
+        }()
+        
+        subView.addSubview(winLabel)
+        mainView.addSubview(subView)
+   
+    }
 
     
 }

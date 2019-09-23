@@ -17,17 +17,18 @@ class MemoryMatching {
             let card = Card()
             cards += [card, card] //2 to match!
         }
-        // TODO: shuffle the cards
-        cards = cards.shuffled()
+//        cards = cards.shuffled()
     }
     
-    func chooseCard(at index: Int) {
+    func chooseCard(at index: Int, player: Bool) -> Bool {
+        var matched = false
         if !cards[index].isMatched {
             if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
                 //check if cards match
                 if cards[matchIndex].identifier == cards[index].identifier {
                     cards[matchIndex].isMatched = true
                     cards[index].isMatched = true
+                    matched = true
                 }
                 cards[index].isFaceUp = true
                 indexOfOneAndOnlyFaceUpCard = nil
@@ -40,5 +41,6 @@ class MemoryMatching {
                 indexOfOneAndOnlyFaceUpCard = index
             }
         }
+        return matched
     }
 }
