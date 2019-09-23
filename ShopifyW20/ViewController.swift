@@ -42,10 +42,22 @@ class ViewController: UIViewController {
         if let cardNumber = cardButtons.firstIndex(of: sender) {
             let matchedCard = game.chooseCard(at: cardNumber, player: playerOnePlaying)
             updateViewFromModel()
-            if (playerOnePlaying && matchedCard) {
-                playerOneScore += 1
-            } else if (!playerOnePlaying && matchedCard) {
-                playerTwoScore += 1
+            if (playerOnePlaying) {
+                if (matchedCard) {
+                    playerOneScore += 1
+                }
+                
+                playerOneLabel.highlightedTextColor = #colorLiteral(red: 0.9607843161, green: 0.7058823705, blue: 0.200000003, alpha: 1)
+                playerOneLabel.isHighlighted = true
+                playerTwoLabel.isHighlighted = false
+            } else if (!playerOnePlaying) {
+                //p2 playing
+                if (matchedCard) {
+                    playerTwoScore += 1
+                }
+                playerTwoLabel.highlightedTextColor = #colorLiteral(red: 0.9607843161, green: 0.7058823705, blue: 0.200000003, alpha: 1)
+                playerTwoLabel.isHighlighted = true
+                playerOneLabel.isHighlighted = false
             }
             twoCardTouched += 1
             if (twoCardTouched == 2) {
@@ -108,12 +120,13 @@ class ViewController: UIViewController {
         
         let subView = UIView(frame: CGRect(x: screenWidth * 0.15, y: screenHeight * 0.25 , width: 300, height: 200))
         subView.backgroundColor = #colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)
+        subView.layer.cornerRadius = 20
         
         
         view.addSubview(subView)
         let winLabel: UILabel = {
             let label = UILabel()
-            label.frame = CGRect(x: screenWidth * 0.15, y: screenHeight * 0.1, width: 300, height: 20)
+            label.frame = CGRect(x: screenWidth * 0.115, y: screenHeight * 0.1, width: 300, height: 20)
             label.text = "Player \(player) won! 🎉"
             label.textColor = .black
             label.font = UIFont(name: "Helvetica", size: 30)
@@ -122,6 +135,11 @@ class ViewController: UIViewController {
         
         subView.addSubview(winLabel)
         mainView.addSubview(subView)
+        
+        for index in cardButtons.indices {
+            let button = cardButtons[index]
+            button.isEnabled = false
+        }
    
     }
 
