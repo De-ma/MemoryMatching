@@ -17,7 +17,7 @@ class MemoryMatching {
             let card = Card()
             cards += [card, card] //2 to match!
         }
-//        cards = cards.shuffled()
+        cards = cards.shuffled()
     }
     
     func chooseCard(at index: Int, player: Bool) -> Bool {
