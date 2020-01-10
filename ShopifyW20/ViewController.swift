@@ -100,6 +100,9 @@ class ViewController: UIViewController {
 
 
     override func viewDidLoad() {
+        for button in cardButtons {
+            button.layer.cornerRadius = 4
+        }
         let ProductProvider = MoyaProvider<ProductService>()
         ProductProvider.request(.getProducts) { result in
             do {
