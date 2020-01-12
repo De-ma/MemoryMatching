@@ -10,59 +10,43 @@ import UIKit
 import Moya
 
 class ViewController: UIViewController {
-
+    
     @IBOutlet weak var mainView: UIView!
     lazy var game = MemoryMatching(numberOfPairsOfCards: cardButtons.count / 2)
-    var playerOneScore = 0 {
+    var matchedCards = 0 {
         didSet {
-            playerOneLabel.text = "Player 1: \(playerOneScore)"
-            if (playerOneScore >= 10) {
-                someoneWon(player: 1)
-            }
-        }
-    }
-    var playerTwoScore = 0 {
-        didSet {
-            playerTwoLabel.text = "Player 2: \(playerTwoScore)"
-            if (playerTwoScore >= 10) {
-                someoneWon(player: 2)
+            if (matchedCards == cardButtons.count / 2) {
+                gameOver()
             }
         }
     }
     
-    @IBOutlet weak var playerOneLabel: UILabel!
-    @IBOutlet weak var playerTwoLabel: UILabel!
+    
     @IBOutlet var cardButtons: [UIButton]!
     static var collection: ShopifyProduct?
+
     var emoji = [Int: String]()
-    var playerOnePlaying = true //lets have player one go first!
     var twoCardTouched = 0
+    var matchAttempts = 0
+
+    
+    @IBAction func ShuffleCards(_ sender: UIButton) {
+        game.shuffleCards()
+    }
     
     @IBAction func touchCard(_ sender: UIButton) {
         if let cardNumber = cardButtons.firstIndex(of: sender) {
-            let matchedCard = game.chooseCard(at: cardNumber, player: playerOnePlaying)
+            let matchedCard = game.chooseCard(at: cardNumber)
             updateViewFromModel()
-            if (playerOnePlaying) {
-                if (matchedCard) {
-                    playerOneScore += 1
-                }
-                
-                playerOneLabel.highlightedTextColor = #colorLiteral(red: 0.9607843161, green: 0.7058823705, blue: 0.200000003, alpha: 1)
-                playerOneLabel.isHighlighted = true
-                playerTwoLabel.isHighlighted = false
-            } else if (!playerOnePlaying) {
-                //p2 playing
-                if (matchedCard) {
-                    playerTwoScore += 1
-                }
-                playerTwoLabel.highlightedTextColor = #colorLiteral(red: 0.9607843161, green: 0.7058823705, blue: 0.200000003, alpha: 1)
-                playerTwoLabel.isHighlighted = true
-                playerOneLabel.isHighlighted = false
+            
+            if (matchedCard) {
+                matchedCards += 1
             }
+            
             twoCardTouched += 1
             if (twoCardTouched == 2) {
                 twoCardTouched = 0
-                playerOnePlaying = !playerOnePlaying
+                matchAttempts += 1
             }
         }
     }
@@ -71,15 +55,15 @@ class ViewController: UIViewController {
         for index in cardButtons.indices {
             let button = cardButtons[index]
             let card = game.cards[index]
-            if card.isFaceUp {
-                let url = URL(string: emoji(for: card))
-                let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
-                button.setBackgroundImage(UIImage(data: data!), for: .normal)
+            if card.isFaceUp, let url = URL(string: emoji(for: card)) {
+                let data = try? Data(contentsOf: url)
+                button.setBackgroundImage(UIImage(data: data!), for: .normal) //!!!!
                 button.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
             } else {
                 button.setTitle("", for: .normal)
                 button.setBackgroundImage(nil, for: .normal)
-                button.backgroundColor = card.isMatched ? #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 0) : #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1)
+                button.backgroundColor = card.isMatched ? #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 0) : #colorLiteral(red: 1, green: 0.5409764051, blue: 0.8473142982, alpha: 1)
+                button.layer.borderWidth = card.isMatched ? 0 : 2
             }
         }
     }
@@ -102,7 +86,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         for button in cardButtons {
             button.layer.cornerRadius = 4
+            button.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            button.layer.borderWidth = 2
         }
+        
         let ProductProvider = MoyaProvider<ProductService>()
         ProductProvider.request(.getProducts) { result in
             do {
@@ -115,37 +102,80 @@ class ViewController: UIViewController {
     }
     
     
-    func someoneWon(player: Int) {
+    func gameOver() {
         
         let screenRect = UIScreen.main.bounds
         let screenWidth = screenRect.size.width
         let screenHeight = screenRect.size.height
+    
+        let gameOverView: UIView = {
+            let view = UIView(frame: CGRect(x: screenWidth * 0.15, y: screenHeight * 0.25 , width: 300, height: 200))
+            view.tag = 2
+            view.backgroundColor = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1)
+            view.layer.borderWidth = 4
+            view.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            view.layer.cornerRadius = 4
+            return view
+        }()
         
-        let subView = UIView(frame: CGRect(x: screenWidth * 0.15, y: screenHeight * 0.25 , width: 300, height: 200))
-        subView.backgroundColor = #colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)
-        subView.layer.cornerRadius = 20
         
-        
-        view.addSubview(subView)
+        view.addSubview(gameOverView)
         let winLabel: UILabel = {
             let label = UILabel()
-            label.frame = CGRect(x: screenWidth * 0.115, y: screenHeight * 0.1, width: 300, height: 20)
-            label.text = "Player \(player) won! 🎉"
+            label.frame = CGRect(x: screenWidth * 0.23, y: screenHeight * 0.05, width: 300, height: 20)
+            label.text = "Game Over!"
             label.textColor = .black
-            label.font = UIFont(name: "Helvetica", size: 30)
+            label.font = UIFont(name: "Helvetica", size: 20)
             return label
         }()
         
-        subView.addSubview(winLabel)
-        mainView.addSubview(subView)
+        let matchAttemptsLabel: UILabel = {
+            let label = UILabel()
+            label.frame = CGRect(x: screenWidth * 0.15, y: screenHeight * 0.10, width: 300, height: 20)
+            label.text = "Matched attempts: \(matchAttempts)"
+            label.textColor = .black
+            label.font = UIFont(name: "Helvetica", size: 20)
+            return label
+        }()
+        
+        let newGameButton: UIButton = {
+           let button = UIButton()
+            button.frame = CGRect(x: screenWidth * 0.01, y: screenHeight * 0.15, width: 300, height: 20)
+            button.setTitle("New Game?", for: .normal)
+            button.setTitleColor(#colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1), for: .normal)
+            button.addTarget(self, action:#selector(self.newGame), for: .touchUpInside)
+            return button
+        }()
+        
+        gameOverView.addSubview(winLabel)
+        gameOverView.addSubview(matchAttemptsLabel)
+        gameOverView.addSubview(newGameButton)
+        mainView.addSubview(gameOverView)
         
         for index in cardButtons.indices {
             let button = cardButtons[index]
             button.isEnabled = false
         }
-   
     }
-
     
+    @objc func newGame() {
+        game = MemoryMatching(numberOfPairsOfCards: cardButtons.count / 2)
+        for index in cardButtons.indices {
+            let button = cardButtons[index]
+            button.isEnabled = true
+            button.layer.cornerRadius = 4
+            button.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            button.layer.borderWidth = 2
+            button.backgroundColor = #colorLiteral(red: 1, green: 0.5409764051, blue: 0.8473142982, alpha: 1)
+        }
+        
+        for subview in mainView.subviews {
+            if subview.tag == 2 {
+                subview.removeFromSuperview()
+            }
+        }
+        
+        matchAttempts = 0
+        matchedCards = 0
+    }
 }
-

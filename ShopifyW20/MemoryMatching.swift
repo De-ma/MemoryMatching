@@ -20,7 +20,7 @@ class MemoryMatching {
         cards = cards.shuffled()
     }
     
-    func chooseCard(at index: Int, player: Bool) -> Bool {
+    func chooseCard(at index: Int) -> Bool {
         var matched = false
         if !cards[index].isMatched {
             if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
@@ -42,5 +42,9 @@ class MemoryMatching {
             }
         }
         return matched
+    }
+    
+    func shuffleCards() {
+        cards = cards.shuffled()
     }
 }
