@@ -67,9 +67,9 @@ class ViewController: UIViewController {
         for index in cardButtons.indices {
             let button = cardButtons[index]
             let card = game.cards[index]
-            if card.isFaceUp, let url = URL(string: emoji(for: card)) {
-                let data = try? Data(contentsOf: url)
-                button.setBackgroundImage(UIImage(data: data!), for: .normal) //!!!!
+            if card.isFaceUp, let url = URL(string: emoji(for: card)), let data = try? Data(contentsOf: url) {
+//                let data = try? Data(contentsOf: url)
+                button.setBackgroundImage(UIImage(data: data), for: .normal) //!!!!
                 button.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
             } else {
                 button.setTitle("", for: .normal)
