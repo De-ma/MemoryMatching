@@ -18,18 +18,12 @@ class ViewController: UIViewController {
         }
     }
     
-    var twoCardTouched = 0
-
-    
     var emoji = [Int: String]()
-    var matchAttempts = 0
+    var matchAttempts = 0.0
     static var collection: ShopifyProduct?
 
     @IBAction func ShuffleCards(_ sender: UIButton) {
         
-        
-
-        twoCardTouched = 0
         game.shuffleCards()
         
         for index in cardButtons.indices {
@@ -49,14 +43,7 @@ class ViewController: UIViewController {
             if (matchedCard) {
                 matchedCards += 1
             }
-            print(twoCardTouched)
-
-            
-            twoCardTouched += 1
-            if (twoCardTouched == 2) {
-                twoCardTouched = 0
-                matchAttempts += 1
-            }
+            matchAttempts += 0.5 //two cards to make 1 attempt
         }
     }
     
@@ -75,7 +62,6 @@ class ViewController: UIViewController {
             }
         }
     }
-    
 
     func emoji(for card: Card) -> String {
         if (emoji[card.identifier] == nil){
@@ -129,7 +115,6 @@ class ViewController: UIViewController {
             return view
         }()
         
-        
         view.addSubview(gameOverView)
         let winLabel: UILabel = {
             let label = UILabel()
@@ -170,6 +155,7 @@ class ViewController: UIViewController {
     }
     
     @objc func newGame() {
+        
         game = MemoryMatching(numberOfPairsOfCards: cardButtons.count / 2)
 
         for index in cardButtons.indices {
@@ -190,7 +176,6 @@ class ViewController: UIViewController {
         
         matchAttempts = 0
         matchedCards = 0
-        twoCardTouched = 0
     }
     
 }
