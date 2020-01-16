@@ -46,5 +46,6 @@ class MemoryMatching {
     
     func shuffleCards() {
         cards = cards.shuffled()
+        indexOfOneAndOnlyFaceUpCard = nil
     }
 }

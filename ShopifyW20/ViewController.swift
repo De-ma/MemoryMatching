@@ -18,16 +18,7 @@ class ViewController: UIViewController {
         }
     }
     
-    var twoCardTouched = 0 {
-        didSet {
-            if (twoCardTouched == 1) {
-                shuffleButton.isEnabled = false
-            } else {
-                //no cards selected
-                shuffleButton.isEnabled = true
-            }
-        }
-    }
+    var twoCardTouched = 0
 
     
     var emoji = [Int: String]()
@@ -35,10 +26,15 @@ class ViewController: UIViewController {
     static var collection: ShopifyProduct?
 
     @IBAction func ShuffleCards(_ sender: UIButton) {
+        
+        
+
+        twoCardTouched = 0
         game.shuffleCards()
+        
         for index in cardButtons.indices {
             let button = cardButtons[index]
-            button.backgroundColor = game.cards[index].isMatched ? #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 0) : #colorLiteral(red: 1, green: 0.5409764051, blue: 0.8473142982, alpha: 1)
+            button.backgroundColor = game.cards[index].isMatched ? #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 0) : #colorLiteral(red: 0.3607843137, green: 0.4156862745, blue: 0.768627451, alpha: 1)
             button.layer.borderWidth = game.cards[index].isMatched ? 0 : 2
             button.setBackgroundImage(nil, for: .normal)
         }
@@ -47,6 +43,7 @@ class ViewController: UIViewController {
     @IBAction func touchCard(_ sender: UIButton) {
         if let cardNumber = cardButtons.firstIndex(of: sender) {
             let matchedCard = game.chooseCard(at: cardNumber)
+            
             updateViewFromModel()
 
             if (matchedCard) {
@@ -68,13 +65,12 @@ class ViewController: UIViewController {
             let button = cardButtons[index]
             let card = game.cards[index]
             if card.isFaceUp, let url = URL(string: emoji(for: card)), let data = try? Data(contentsOf: url) {
-//                let data = try? Data(contentsOf: url)
-                button.setBackgroundImage(UIImage(data: data), for: .normal) //!!!!
+                button.setBackgroundImage(UIImage(data: data), for: .normal)
                 button.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
             } else {
                 button.setTitle("", for: .normal)
                 button.setBackgroundImage(nil, for: .normal)
-                button.backgroundColor = card.isMatched ? #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 0) : #colorLiteral(red: 1, green: 0.5409764051, blue: 0.8473142982, alpha: 1)
+                button.backgroundColor = card.isMatched ? #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 0) : #colorLiteral(red: 0.3607843137, green: 0.4156862745, blue: 0.768627451, alpha: 1)
                 button.layer.borderWidth = card.isMatched ? 0 : 2
             }
         }
@@ -100,6 +96,9 @@ class ViewController: UIViewController {
             button.layer.cornerRadius = 4
             button.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
             button.layer.borderWidth = 2
+            button.layer.shadowOpacity = 0.4
+            button.layer.shadowRadius = 2
+            button.layer.shadowColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
         }
         
         let ProductProvider = MoyaProvider<ProductService>()
@@ -179,7 +178,7 @@ class ViewController: UIViewController {
             button.layer.cornerRadius = 4
             button.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
             button.layer.borderWidth = 2
-            button.backgroundColor = #colorLiteral(red: 1, green: 0.5409764051, blue: 0.8473142982, alpha: 1)
+            button.backgroundColor = #colorLiteral(red: 0.3607843137, green: 0.4156862745, blue: 0.768627451, alpha: 1)
             button.setBackgroundImage(nil, for: .normal)
         }
         
