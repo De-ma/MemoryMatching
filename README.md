@@ -7,7 +7,7 @@ iOS application that is a memory matching game, for Shopify Mobile (iOS) challen
 
 ## Screenshots 
 
-<img src="https://raw.githubusercontent.com/De-ma/MemoryMatching/master/Screenshots/Game%20Won.png" width="100" height="500">
+<img src="https://raw.githubusercontent.com/De-ma/MemoryMatching/master/Screenshots/Game%20Won.png" width="400" height="1000">
 
 ![](https://raw.githubusercontent.com/De-ma/MemoryMatching/master/Screenshots/Mid%20Game.png)
 
