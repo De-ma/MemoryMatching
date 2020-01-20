@@ -6,7 +6,7 @@ iOS application that is a memory matching game, for Shopify Mobile (iOS) challen
 - Alamofire
 
 ## Screenshots 
-![](https://raw.githubusercontent.com/De-ma/MemoryMatching/master/Screenshots/Game%20Won.png)
+![](https://raw.githubusercontent.com/De-ma/MemoryMatching/master/Screenshots/Game%20Won.png =500x100)
 
 ![](https://raw.githubusercontent.com/De-ma/MemoryMatching/master/Screenshots/Mid%20Game.png)
 
