@@ -1,5 +1,5 @@
 import UIKit
-import Moya
+import Alamofire
 
 class ViewController: UIViewController {
     
@@ -65,12 +65,11 @@ class ViewController: UIViewController {
 
     func emoji(for card: Card) -> String {
         if (emoji[card.identifier] == nil){
-            //JIT loading
-            if let test = ViewController.collection, (ViewController.collection?.products.count)! > 0 {
+        //JIT loading
+            if let test = ViewController.collection, let count = ViewController.collection?.products.count, count > 0 {
                 let randomIndex = Int(arc4random_uniform(UInt32(test.products.count)))
                 emoji[card.identifier] = ViewController.collection?.products[randomIndex].image.src
                 ViewController.collection?.products.remove(at: randomIndex)
-                return emoji[card.identifier]!
             }
         }
         return emoji[card.identifier] ?? "?"
@@ -87,14 +86,17 @@ class ViewController: UIViewController {
             button.layer.shadowColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
         }
         
-        let ProductProvider = MoyaProvider<ProductService>()
-        ProductProvider.request(.getProducts) { result in
-            do {
-                let decoder = JSONDecoder()
-                ViewController.collection = try decoder.decode(ShopifyProduct.self, from: (result.value?.data)!)
-            } catch let err {
-                print("Err", err)
-            }
+        guard let url = URL(string: "https://shopicruit.myshopify.com/admin/products.json?page=1&access_token=c32313df0d0ef512ca64d5b336a0d7c6") else {
+          return
+        }
+        
+        AF.request(url, method: .get)
+            .validate()
+            .responseJSON { response in
+                guard let data = response.data else {
+                    return
+                }
+                ViewController.collection = try? JSONDecoder().decode(ShopifyProduct.self, from: data)
         }
     }
     
@@ -128,7 +130,7 @@ class ViewController: UIViewController {
         let matchAttemptsLabel: UILabel = {
             let label = UILabel()
             label.frame = CGRect(x: screenWidth * 0.15, y: screenHeight * 0.10, width: 300, height: 20)
-            label.text = "Matched attempts: \(matchAttempts)"
+            label.text = "Matched attempts: \(Int(matchAttempts))"
             label.textColor = .black
             label.font = UIFont(name: "Helvetica", size: 20)
             return label
@@ -155,7 +157,6 @@ class ViewController: UIViewController {
     }
     
     @objc func newGame() {
-        
         game = MemoryMatching(numberOfPairsOfCards: cardButtons.count / 2)
 
         for index in cardButtons.indices {
@@ -173,7 +174,6 @@ class ViewController: UIViewController {
                 subview.removeFromSuperview()
             }
         }
-        
         matchAttempts = 0
         matchedCards = 0
     }

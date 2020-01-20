@@ -6,5 +6,5 @@ target 'ShopifyW20' do
   use_frameworks!
 
   # Pods for ShopifyW20
-  pod 'Moya', '~> 13.0'
+  pod 'Alamofire', '~> 5.0.0-rc.3'
 end

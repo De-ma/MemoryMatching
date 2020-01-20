@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,11 +16,8 @@
 		B370A4142337F35500315E5C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B370A4122337F35500315E5C /* LaunchScreen.storyboard */; };
 		B370A41D233803C900315E5C /* MemoryMatching.swift in Sources */ = {isa = PBXBuildFile; fileRef = B370A41C233803C900315E5C /* MemoryMatching.swift */; };
 		B370A41F2338045A00315E5C /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = B370A41E2338045A00315E5C /* Card.swift */; };
-		B370A42623382EF900315E5C /* ProductService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B370A42523382EF900315E5C /* ProductService.swift */; };
 		B370A4282338327500315E5C /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = B370A4272338327500315E5C /* Product.swift */; };
-		B370A42B233833A600315E5C /* Variant.swift in Sources */ = {isa = PBXBuildFile; fileRef = B370A42A233833A600315E5C /* Variant.swift */; };
 		B370A42D2338349D00315E5C /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = B370A42C2338349D00315E5C /* Image.swift */; };
-		B370A42F233834B300315E5C /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = B370A42E233834B300315E5C /* Option.swift */; };
 		B370A4312338410500315E5C /* ShopifyProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = B370A4302338410500315E5C /* ShopifyProduct.swift */; };
 /* End PBXBuildFile section */
 
@@ -38,11 +35,8 @@
 		B370A4152337F35500315E5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B370A41C233803C900315E5C /* MemoryMatching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryMatching.swift; sourceTree = "<group>"; };
 		B370A41E2338045A00315E5C /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
-		B370A42523382EF900315E5C /* ProductService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductService.swift; sourceTree = "<group>"; };
 		B370A4272338327500315E5C /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
-		B370A42A233833A600315E5C /* Variant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Variant.swift; sourceTree = "<group>"; };
 		B370A42C2338349D00315E5C /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
-		B370A42E233834B300315E5C /* Option.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
 		B370A4302338410500315E5C /* ShopifyProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopifyProduct.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -103,7 +97,6 @@
 				B370A41C233803C900315E5C /* MemoryMatching.swift */,
 				B370A41E2338045A00315E5C /* Card.swift */,
 				B370A4152337F35500315E5C /* Info.plist */,
-				B370A42523382EF900315E5C /* ProductService.swift */,
 				B370A4292338339900315E5C /* Models */,
 			);
 			path = ShopifyW20;
@@ -123,9 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				B370A4272338327500315E5C /* Product.swift */,
-				B370A42A233833A600315E5C /* Variant.swift */,
 				B370A42C2338349D00315E5C /* Image.swift */,
-				B370A42E233834B300315E5C /* Option.swift */,
 				B370A4302338410500315E5C /* ShopifyProduct.swift */,
 			);
 			path = Models;
@@ -229,24 +220,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ShopifyW20/Pods-ShopifyW20-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
-				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-ShopifyW20/Pods-ShopifyW20-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-ShopifyW20/Pods-ShopifyW20-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ShopifyW20/Pods-ShopifyW20-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ShopifyW20/Pods-ShopifyW20-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -261,9 +243,6 @@
 				B370A40A2337F35300315E5C /* AppDelegate.swift in Sources */,
 				B370A41D233803C900315E5C /* MemoryMatching.swift in Sources */,
 				B370A41F2338045A00315E5C /* Card.swift in Sources */,
-				B370A42623382EF900315E5C /* ProductService.swift in Sources */,
-				B370A42B233833A600315E5C /* Variant.swift in Sources */,
-				B370A42F233834B300315E5C /* Option.swift in Sources */,
 				B370A4312338410500315E5C /* ShopifyProduct.swift in Sources */,
 				B370A4282338327500315E5C /* Product.swift in Sources */,
 			);
