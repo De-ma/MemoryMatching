@@ -5,7 +5,6 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var mainView: UIView!
     @IBOutlet var cardButtons: [UIButton]!
-    @IBOutlet weak var shuffleButton: UIButton!
     @IBOutlet weak var matchedCardsLabel: UILabel!
     
     lazy var game = MemoryMatching(numberOfPairsOfCards: cardButtons.count / 2)
